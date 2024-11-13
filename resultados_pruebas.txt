@@ -1,0 +1,16 @@
+test_count_transactions (test_bank_account.BankAccountTest.test_count_transactions) ... ok
+test_deposit_negative (test_bank_account.BankAccountTest.test_deposit_negative) ... ok
+test_deposit_positive (test_bank_account.BankAccountTest.test_deposit_positive) ... ok
+test_get_balance (test_bank_account.BankAccountTest.test_get_balance) ... ok
+test_transaction (test_bank_account.BankAccountTest.test_transaction) ... ok
+test_withdraw_negative (test_bank_account.BankAccountTest.test_withdraw_negative) ... ok
+test_withdraw_positive (test_bank_account.BankAccountTest.test_withdraw_positive) ... ok
+test_add (test_calculator.CalculatorTest.test_add) ... ok
+test_divide (test_calculator.CalculatorTest.test_divide) ... ok
+test_multiply (test_calculator.CalculatorTest.test_multiply) ... ok
+test_substract (test_calculator.CalculatorTest.test_substract) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.051s
+
+OK
