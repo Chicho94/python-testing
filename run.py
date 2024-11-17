@@ -8,27 +8,24 @@ def ejecutar_main():
     print("Ejecutando main.py...")
     subprocess.run(["python", "main.py"])
 
-def ejecutar_pruebas(guardar_en_archivo=False):
-    """Ejecuta todas las pruebas unitarias en la carpeta tests/ y guarda los resultados si se solicita."""
-    print("Ejecutando pruebas unitarias...")
-
-    # Cargar todas las pruebas desde la carpeta 'tests'
-    tests = unittest.defaultTestLoader.discover('tests')
+def ejecutar_pruebas_con_coverage():
+    """Ejecuta pruebas unitarias con coverage y genera reportes."""
+    print("Ejecutando pruebas con coverage...")
     
-    if guardar_en_archivo:
-        try:
-            # Abrir archivo para almacenar los resultados
-            with open("resultados_pruebas.txt", "w") as archivo_resultado:
-                # Crear un TextTestRunner que escriba en el archivo
-                test_runner = unittest.TextTestRunner(stream=archivo_resultado, verbosity=2)
-                test_runner.run(tests)
-            print("Resultados guardados en 'resultados_pruebas.txt'")
-        except Exception as e:
-            print(f"Ocurrió un error al guardar los resultados: {e}")
-    else:
-        # Ejecutar normalmente en la consola
-        test_runner = unittest.TextTestRunner(verbosity=2)
-        test_runner.run(tests)
+    try:
+        # Ejecutar coverage run en la carpeta de pruebas
+        subprocess.run(["coverage", "run", "-m", "unittest", "discover", "-s", "tests", "-p", "test_*.py"], check=True)
+        
+        # Generar reporte en consola
+        print("\nGenerando reporte de cobertura en consola:")
+        subprocess.run(["coverage", "report", "--fail-under=99"], check=True)
+
+        # Generar reporte HTML
+        print("\nGenerando reporte HTML en la carpeta 'htmlcov':")
+        subprocess.run(["coverage", "html"], check=True)
+        print("\nReporte HTML generado en 'htmlcov/index.html'")
+    except subprocess.CalledProcessError as e:
+        print(f"Ocurrió un error al ejecutar coverage: {e}")
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
@@ -36,9 +33,15 @@ if __name__ == "__main__":
         if comando == "main":
             ejecutar_main()
         elif comando == "test":
-            # Verificar si se solicita guardar en archivo
-            guardar = len(sys.argv) > 2 and sys.argv[2].lower() == "guardar"
-            ejecutar_pruebas(guardar_en_archivo=guardar)
+            # Verificar si se solicita usar coverage
+            usar_coverage = len(sys.argv) > 2 and sys.argv[2].lower() == "coverage"
+            if usar_coverage:
+                ejecutar_pruebas_con_coverage()
+            else:
+                # Ejecutar pruebas sin coverage
+                print("Ejecutando pruebas unitarias sin coverage...")
+                tests = unittest.defaultTestLoader.discover('tests')
+                unittest.TextTestRunner(verbosity=2).run(tests)
         else:
             print("Comando no reconocido. Usa 'main' para ejecutar la aplicación o 'test' para ejecutar pruebas.")
     else:
